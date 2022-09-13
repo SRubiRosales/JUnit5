@@ -19,4 +19,14 @@ class CuentaTest {
         assertEquals(expectativa, realidad);
         assertTrue(realidad.equals("Sharon"));
     }
+
+    @Test
+    void testSaldoCuenta() {
+        Cuenta cuenta = new Cuenta("Sharon", new BigDecimal("1000.12234"));
+        //El saldo tiene el valor esperado
+        assertEquals(1000.12234, cuenta.getSaldo().doubleValue());
+        //El saldo no es negativo
+        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
 }
