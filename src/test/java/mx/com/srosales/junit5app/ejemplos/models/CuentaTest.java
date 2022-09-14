@@ -1,5 +1,6 @@
 package mx.com.srosales.junit5app.ejemplos.models;
 
+import mx.com.srosales.junit5app.ejemplos.exceptions.DineroInsuficienteException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -58,5 +59,18 @@ class CuentaTest {
         assertNotNull(cuenta.getSaldo());
         assertEquals(1100, cuenta.getSaldo().intValue());
         assertEquals("1100.1234", cuenta.getSaldo().toPlainString());
+    }
+
+    @Test
+    void testDineroInsuficienteExceptionCuenta() {
+        Cuenta cuenta = new Cuenta("Sharon", new BigDecimal("1000.1234"));
+        //Evalua si se lanza la excepcion
+        Exception exception = assertThrows(DineroInsuficienteException.class, ()-> {
+            cuenta.debito(new BigDecimal("1500.00"));
+        });
+        //Evalua que el mensaje de error sea el correcto
+        String real = exception.getMessage();
+        String esperado = "Dinero Insuficiente";
+        assertEquals(esperado, real);
     }
 }

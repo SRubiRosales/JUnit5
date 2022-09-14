@@ -1,5 +1,7 @@
 package mx.com.srosales.junit5app.ejemplos.models;
 
+import mx.com.srosales.junit5app.ejemplos.exceptions.DineroInsuficienteException;
+
 import java.math.BigDecimal;
 
 public class Cuenta {
@@ -32,7 +34,12 @@ public class Cuenta {
      * @param monto
      */
     public void debito(BigDecimal monto) {
-        this.saldo = this.saldo.subtract(monto);
+        BigDecimal nuevoSaldo = this.saldo.subtract(monto);
+        //Lanzar excepcion si la cuenta no tiene saldo suficiente
+        if (nuevoSaldo.compareTo(BigDecimal.ZERO) < 0) {
+            throw new DineroInsuficienteException("Dinero Insuficiente");
+        }
+        this.saldo = nuevoSaldo;
     }
 
     /**
