@@ -1,6 +1,7 @@
 package mx.com.srosales.junit5app.ejemplos.models;
 
 import mx.com.srosales.junit5app.ejemplos.exceptions.DineroInsuficienteException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -12,8 +13,9 @@ class CuentaTest {
      * Método default encapsulado en el entorno de ejecución de pruebas
      */
     @Test
+    @DisplayName("Probando nombre de la cuenta corriente")
     void testNombreCuenta() {
-        Cuenta cuenta = new Cuenta("Sharon RS", new BigDecimal("1000.12345"));
+        Cuenta cuenta = new Cuenta("Sharon", new BigDecimal("1000.12345"));
 //        cuenta.setPersona("Sharon");
         String expectativa = "Sharon";
         String realidad = cuenta.getPersona();
@@ -23,6 +25,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando el saldo de la cuent corriente, que no sea null, mayor que cero, valor esperado")
     void testSaldoCuenta() {
         Cuenta cuenta = new Cuenta("Sharon", new BigDecimal("1000.12234"));
         //El saldo no es nulo
@@ -35,6 +38,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando referencias que sean iguales con el metodo equals")
     void textReferenciaCuenta() {
         Cuenta cuenta1 = new Cuenta("John Lennon", new BigDecimal("8999.87"));
         Cuenta cuenta2 = new Cuenta("John Lennon", new BigDecimal("8999.87"));
@@ -87,23 +91,24 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando relaciones entre las cuentas y el banco con assertAll")
     void testRelacionBancoCuentas() {
         Cuenta cuenta1 = new Cuenta("Rubí", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andrés", new BigDecimal("1500.8989"));
         Banco banco = new Banco();
         banco.addCuenta(cuenta1);
         banco.addCuenta(cuenta2);
-        banco.setNombre("Banco del Estado.");
+        banco.setNombre("Banco del Estado");
         banco.transferir(cuenta2, cuenta1, new BigDecimal("500"));
 
         assertAll(
-                () -> assertEquals("1001.8989", cuenta2.getSaldo().toPlainString(),
+                () -> assertEquals("1000.8989", cuenta2.getSaldo().toPlainString(),
                         ()->"El valor del saldo de la cuenta2 no es el esperado"),
                 () -> assertEquals("3000", cuenta1.getSaldo().toPlainString(),
                         ()->"El valor del saldo de la cuenta1 no es el esperado"),
                 () -> assertEquals(2, banco.getCuentas().size()),
                 () -> assertEquals("Banco del Estado", cuenta1.getBanco().getNombre()),
-                () -> {assertEquals("Sharon", banco.getCuentas().stream().filter(cuenta ->
+                () -> {assertEquals("Rubí", banco.getCuentas().stream().filter(cuenta ->
                         cuenta.getPersona().equals("Rubí")
                     ).findFirst().get().getPersona());},
                 () -> assertTrue(banco.getCuentas().stream().anyMatch(cuenta -> cuenta.getPersona().equals("Rubí")))
