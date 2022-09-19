@@ -1,6 +1,7 @@
 package mx.com.srosales.junit5app.ejemplos.models;
 
 import mx.com.srosales.junit5app.ejemplos.exceptions.DineroInsuficienteException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -91,8 +92,10 @@ class CuentaTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Probando relaciones entre las cuentas y el banco con assertAll")
     void testRelacionBancoCuentas() {
+        fail();//Forza el error
         Cuenta cuenta1 = new Cuenta("Rubí", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andrés", new BigDecimal("1500.8989"));
         Banco banco = new Banco();
