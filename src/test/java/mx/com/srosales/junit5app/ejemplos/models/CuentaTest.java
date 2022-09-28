@@ -2,6 +2,7 @@ package mx.com.srosales.junit5app.ejemplos.models;
 
 import mx.com.srosales.junit5app.ejemplos.exceptions.DineroInsuficienteException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.math.BigDecimal;
 
@@ -136,5 +137,33 @@ class CuentaTest {
                     ).findFirst().get().getPersona());},
                 () -> assertTrue(banco.getCuentas().stream().anyMatch(cuenta -> cuenta.getPersona().equals("Rubí")))
         );
+    }
+
+    //Test condicionales segun sistema operativo
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testSoloWindows() {}
+
+    @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
+    void testSoloLinuxMac() {}
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void testNoWindows() {}
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    void soloJDK8() {
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_11)
+    void soloJDK15() {
+    }
+
+    @Test
+    @DisabledOnJre(JRE.JAVA_8)
+    void testNoJDK8() {
     }
 }
