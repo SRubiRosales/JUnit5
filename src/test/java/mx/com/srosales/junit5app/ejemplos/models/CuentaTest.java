@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CuentaTest {
@@ -224,5 +225,31 @@ class CuentaTest {
     @Test
     @DisabledIfEnvironmentVariable(named = "ENVIRONMENT", matches = "prod")
     void testEnvProdDisabled() {
+    }
+
+    @Test
+    @DisplayName("Probando el saldo de la cuenta corriente en entorno de desarrollo")
+    void testSaldoCuentaDev() {
+        boolean esDev = "dev".equals(System.getProperty("ENV"));
+        //Si esDev es true, se ejecuta la prueba. De lo contrario se deshabilita
+        assumeTrue(esDev);
+        assertNotNull(cuenta.getSaldo());
+        assertEquals(1000.12345, cuenta.getSaldo().doubleValue());
+        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @Test
+    @DisplayName("Probando el saldo de la cuenta corriente en entorno de desarrollo")
+    void testSaldoCuentaDev2() {
+        boolean esDev = "dev".equals(System.getProperty("ENV"));
+        //Si esDev es true, se ejecutan la pruebas dentro de la expresion lambda. De lo contrario se deshabilita
+        assumingThat(esDev, () -> {
+            assertNotNull(cuenta.getSaldo());
+            assertEquals(1000.12345, cuenta.getSaldo().doubleValue());
+        });
+        //Los asserts que estan fuera del metodo assuming se ejecutan de todos modos
+        assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
     }
 }
