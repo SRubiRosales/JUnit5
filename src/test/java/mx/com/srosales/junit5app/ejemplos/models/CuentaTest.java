@@ -43,6 +43,7 @@ class CuentaTest {
         System.out.println("Finalizando el test");
     }
 
+    @Tag("cuenta")//Etiqueta aplicada a todos los metodos de la clase
     @Nested
     @DisplayName("Probando atributos de la cuenta corriente")
     class CuentaTestNombreSaldo {
@@ -86,6 +87,7 @@ class CuentaTest {
 
     @Nested
     class CuentaOperacionesTest {
+        @Tag("cuenta")//Etiqueta aplicada al metodo testDebitoCuenta
         @Test
         void testDebitoCuenta() {
             cuenta = new Cuenta("Sharon", new BigDecimal("1000.1234"));
@@ -95,6 +97,7 @@ class CuentaTest {
             assertEquals("900.1234", cuenta.getSaldo().toPlainString());
         }
 
+        @Tag("cuenta")
         @Test
         void testCreditoCuenta() {
             cuenta = new Cuenta("Sharon", new BigDecimal("1000.1234"));
@@ -104,6 +107,8 @@ class CuentaTest {
             assertEquals("1100.1234", cuenta.getSaldo().toPlainString());
         }
 
+        @Tag("cuenta")
+        @Tag("banco")//Pueden aplicarse varias etiquetas
         @Test
         void testTransferirDineroCuentas() {
             Cuenta cuenta1 = new Cuenta("Rubí", new BigDecimal("2500"));
@@ -116,6 +121,8 @@ class CuentaTest {
         }
     }
 
+    @Tag("cuenta")
+    @Tag("error")
     @Test
     void testDineroInsuficienteExceptionCuenta() {
         cuenta = new Cuenta("Sharon", new BigDecimal("1000.1234"));
@@ -130,6 +137,8 @@ class CuentaTest {
     }
 
     @Test
+    @Tag("cuenta")
+    @Tag("banco")
     //@Disabled
     @DisplayName("Probando relaciones entre las cuentas y el banco con assertAll")
     void testRelacionBancoCuentas() {
@@ -292,6 +301,7 @@ class CuentaTest {
         assertEquals("900.1234", cuenta.getSaldo().toPlainString());
     }
 
+    @Tag("param")//Etiqueta aplicada a todos los metodos de la clase
     @Nested
     class PruebasParametrizadasTest {
         @ParameterizedTest(name = "Repeticion {index} ejecutando con valor {0} - {argumentsWithNames}")
