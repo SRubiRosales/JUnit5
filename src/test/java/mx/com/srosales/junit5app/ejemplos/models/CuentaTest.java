@@ -10,10 +10,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -375,5 +377,28 @@ class CuentaTest {
 
     private static List<String> montoList() {
         return Arrays.asList("100", "200", "300", "500", "700", "1000.12345");
+    }
+
+    @Nested
+    @Tag("timeout")
+    class EjemploTimeOutTest {
+        @Test
+        @Timeout(5)//La prueba falla despues de 5s.
+        void testTimeout() throws InterruptedException {
+            TimeUnit.SECONDS.sleep(4);
+        }
+
+        @Test
+        @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)//La prueba falla despues de medio segundo
+        void testTimeout2() throws InterruptedException {
+            TimeUnit.MILLISECONDS.sleep(400);
+        }
+
+        @Test
+        void testTimeoutAssertions() {
+            assertTimeout(Duration.ofSeconds(5), () -> {
+                TimeUnit.MILLISECONDS.sleep(4000);
+            });
+        }
     }
 }
